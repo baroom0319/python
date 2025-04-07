@@ -6,6 +6,14 @@ def click_btn():
     label["text"] = random.choice(["대길","중길","소길","흉"])
     label.update()
 
+# 마우스 좌표 값 함수
+def mouseMove(event):
+    x = event.x
+    y = event.y
+    labelMouse.config(text=str(x)+","+str(y))
+  
+    labelMouse.place(x=0, y=0)
+
 # 캔버스 만들기
 root = tkinter.Tk()
 root.title("제비뽑기 프로그램")
@@ -24,5 +32,9 @@ label.place(x=360, y=36)
 #버튼 위치
 button = tkinter.Button(root, text="제비뽑기", font=("Times New Roman", 36), command=click_btn, fg="skyblue")
 button.place(x=360, y=400)
+
+#마우스 좌표 값
+root.bind("<Motion>", mouseMove)
+labelMouse = tkinter.Label(root, text=",", font=("맑은고딕", 10))
 
 root.mainloop() 
