@@ -1,0 +1,11 @@
+def func2() :
+    global hap              #, num1 로쓸시 num1이 전역변수로 변함
+    num1 = 1                #지역변수 (함수 안에 선언된 변수)가 우선적용
+    result = 100 + num1     #읽기는 가능
+    hap = result            #쓰기는 불가능
+    return result
+
+hap = 0
+num1 = 10
+hap = func2()
+print("fun2()에서 돌려준 값 ==>", hap)

@@ -2,6 +2,11 @@ import tkinter
 import random
 import tkinter.messagebox
 
+#numStr = int(input("숫자 : "))
+#사용자에게 보여주는 값
+#num = int(numStr)
+#numStr을 정수로 환원해줌
+
 result = [
     " 전생에 고양이었을 가능성은 매우 낮습니다.",
     " 보통 사람입니다.",
