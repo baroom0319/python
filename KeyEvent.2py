@@ -1,0 +1,58 @@
+import tkinter
+
+# 전역 변수
+key = 0
+cx = 400
+cy = 300
+
+# 함수 영역
+def main_proc():
+    global cx, cy, key
+    # 키보드 입력으로 위치변경
+    if key == "Up":
+        cy -= 20
+    if key == "Down":
+        cy += 20
+    if key == "Left":
+        cx -= 20
+    if key == "Right":
+        cx += 20
+
+    # 중력처럼 캐릭터가 아래로 이동
+    cy += 10
+
+    # 경계 체크
+    if cy < 40: cy = 40
+    if cy > 600 - 40: cy = 600 - 40
+    if cx < 40: cx = 40
+    if cx > 800 - 40: cx = 800 - 40
+
+    # 위치 갱신
+    canvas.coords("춘식", cx, cy)
+    root.after(100, main_proc)
+
+def key_down(e):
+    global key
+    key = e.keysym
+
+def key_up(e):
+    global key
+    key = 0
+
+# 메인 영역
+root = tkinter.Tk()
+root.title("키 이벤트")
+
+# 올바른 바인딩
+root.bind("<KeyPress>", key_down)
+root.bind("<KeyRelease>", key_up)
+
+canvas = tkinter.Canvas(width=800, height=600, bg='skyblue')
+canvas.pack()
+
+img = tkinter.PhotoImage(file="춘식.png")
+canvas.create_image(400, 300, image=img, tag="춘식")
+canvas.coords("춘식", 500, 400)
+
+main_proc()
+root.mainloop()
