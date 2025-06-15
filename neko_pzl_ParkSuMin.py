@@ -121,7 +121,7 @@ def check_neko():
 
     for y in range(1, 11):
         for x in range(1, 9): 
-            if check[y][x] > 0: #대각선 블럭럭
+            if check[y][x] > 0: #대각선 블럭
                 if is_match(check[y-1][x-1], check[y][x]) and is_match(check[y+1][x+1], check[y][x]):
                     neko[y - 1][x - 1] = 9
                     neko[y][x] = 9
@@ -195,7 +195,7 @@ def is_match(a, b): #조커함수
     return a == b or a == 8 or b == 8
 
 def game_main():
-    global index, timer, score, hisc, difficulty, tsugi, tmr, timer_active, no_input_time, game_loop_running, joker_count, joker_pending
+    global index, timer, score, hisc, difficulty, tsugi, tmr, timer_active, no_input_time, game_loop_running, joker_count, joker_pending, new_joker_pending
     global cursor_x, cursor_y, mouse_c
     if game_loop_running:
         return
