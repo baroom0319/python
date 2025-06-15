@@ -8,6 +8,7 @@ score = 0
 hisc = 1000
 difficulty = 0
 tsugi = 0
+timerCount = 0
 
 cursor_x = 0
 cursor_y = 0
@@ -31,6 +32,15 @@ def mouse_press(e):
     global mouse_c
     mouse_c = 1
 
+# 공간정보 저장
+neko = []
+check = []
+for i in range(10):
+    neko.append([0, 0, 0, 0, 0, 0, 0, 0])
+    check.append([0, 0, 0, 0, 0, 0, 0, 0])
+
+blockCount = ([0, 0, 0, 0, 0, 0, 0, 0])
+
 def draw_neko(): 
     cvs.delete("NEKO")  # 캔버스에서 "NEKO"을 삭제
     for y in range(10): # 세로
@@ -47,6 +57,7 @@ def check_neko():
         for x in range(8): # 맨 위와 맨 아래줄을 제외한 모든 칸에 대해서 실행
             if check[y][x] > 0: #세로 블럭
                 if check[y - 1][x] == check[y][x] and check[y + 1][x] == check[y][x]:
+                    blockCount[neko[y][x]] += 3
                     neko[y - 1][x] = 7
                     neko[y][x] = 7
                     neko[y + 1][x] = 7
@@ -71,13 +82,24 @@ def check_neko():
                     neko[y][x] = 7
                     neko[y - 1][x + 1] = 7
 
+    for y in range(0, 9):
+        for x in range(0, 7): 
+            if check[y][x] > 0:
+                if check[y + 1][x] == check[y][x] and check[y + 1][x] == check[y][x] and check[y + 1][x + 1] == check[y][x]:
+                    neko[y - 1][x] = 7
+                    neko[y][x + 1] = 7
+                    neko[y + 1][x] = 7
+                    neko[y + 1][x + 1] = 7
+
 def sweep_neko():
+    global blockCount
     num = 0
     for y in range(10):
         for x in range(8):# 모든 칸에 대해서 실행
             if neko[y][x] == 7:
                 neko[y][x] = 0   # 빈칸
                 num = num + 1    # 파괴된 블럭 개수를 표현
+    print("blockCount :", blockCount)
     return num
 
 def drop_neko():
@@ -188,6 +210,7 @@ def game_main():
     draw_txt("HISC " + str(hisc), 450, 60, 32, "yellow", "INFO")
     if tsugi > 0:
         cvs.create_image(752, 128, image=img_neko[tsugi], tag="INFO")
+
     root.after(100, game_main)
 
 # 메인 영역
