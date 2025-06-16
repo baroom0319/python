@@ -101,6 +101,41 @@ def check_neko():
     for y in range(12):
         for x in range(10): # 모든 칸에 대해서 실행
             check[y][x] = neko[y][x] # neko -> check (복사)
+            
+    def is_joker(block):
+        return block == 8
+
+    def get_joker_group(y, x):
+        dirs = [(-1,0),(1,0),(0,-1),(0,1), (-1,-1),(-1,1),(1,-1),(1,1)]
+        neighbor_blocks = []
+        for dy, dx in dirs:
+            ny, nx = y + dy, x + dx
+            if 0 <= ny < 12 and 0 <= nx < 10:
+                b = check[ny][nx]
+                if b != 0 and b != 8:
+                    neighbor_blocks.append(b)
+        from collections import Counter
+        c = Counter(neighbor_blocks)
+        for block_type, count in c.items():
+            if count >= 2:
+                return block_type
+        return 0
+
+    for y in range(12):
+        for x in range(10):
+            if is_joker(check[y][x]):
+                block_type = get_joker_group(y, x)
+                if block_type != 0:
+                    # 조커도 파괴
+                    neko[y][x] = 9
+
+                    # 주변에 같은 종류 블럭이 2개 이상일 경우 모두 파괴
+                    dirs = [(-1,0),(1,0),(0,-1),(0,1), (-1,-1),(-1,1),(1,-1),(1,1)]
+                    for dy, dx in dirs:
+                        ny, nx = y + dy, x + dx
+                        if 0 <= ny < 12 and 0 <= nx < 10:
+                            if neko[ny][nx] == block_type:
+                                neko[ny][nx] = 9
 
     for y in range(1, 11):
         for x in range(9): # 맨 위와 맨 아래줄을 제외한 모든 칸에 대해서 실행
@@ -149,6 +184,7 @@ def check_neko():
                     neko[y+1][x] = 9
                     neko[y+1][x+1] = 9
 
+
 def reset_game_loop_flag():
     global game_loop_running
     game_loop_running = False
@@ -192,7 +228,7 @@ def draw_txt(txt, x, y, siz, col, tg):
 
 def is_match(a, b): #조커함수
     # 8번은 조커 블럭
-    return a == b or a == 8 or b == 8
+    return a == b and a != 8 and b != 8
 
 def game_main():
     global index, timer, score, hisc, difficulty, tsugi, tmr, timer_active, no_input_time, game_loop_running, joker_count, joker_pending, new_joker_pending
